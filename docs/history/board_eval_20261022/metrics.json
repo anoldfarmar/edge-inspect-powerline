@@ -1,0 +1,119 @@
+{
+  "method": "Matched RKNN support/query, fixed server FP32 C-arm coreset indices; no KCenter rerun",
+  "unique_queries": 5215,
+  "combinations": [
+    {
+      "combination": "glass-insulator/missing-cap",
+      "normal_count": 500,
+      "anomaly_count": 705,
+      "server_C_auroc": 0.9128737588652482,
+      "board_matched_auroc": 0.9139035460992908,
+      "board_minus_server_pp": 0.10297872340425673,
+      "independent_pairwise_board_auc": 0.9139035460992908,
+      "independent_server_auc": 0.9128737588652482,
+      "normal_path_set_matches": true,
+      "anomaly_path_set_matches": true
+    },
+    {
+      "combination": "lightning-rod-suspension/rust",
+      "normal_count": 500,
+      "anomaly_count": 315,
+      "server_C_auroc": 0.9717206349206349,
+      "board_matched_auroc": 0.9726984126984127,
+      "board_minus_server_pp": 0.09777777777778551,
+      "independent_pairwise_board_auc": 0.9726984126984127,
+      "independent_server_auc": 0.9717206349206349,
+      "normal_path_set_matches": true,
+      "anomaly_path_set_matches": true
+    },
+    {
+      "combination": "polymer-insulator-upper-shackle/corrosion",
+      "normal_count": 500,
+      "anomaly_count": 725,
+      "server_C_auroc": 0.8973324137931035,
+      "board_matched_auroc": 0.8976248275862069,
+      "board_minus_server_pp": 0.029241379310340765,
+      "independent_pairwise_board_auc": 0.8976248275862069,
+      "independent_server_auc": 0.8973324137931035,
+      "normal_path_set_matches": true,
+      "anomaly_path_set_matches": true
+    },
+    {
+      "combination": "polymer-insulator-upper-shackle/rust",
+      "normal_count": 500,
+      "anomaly_count": 22,
+      "server_C_auroc": 0.8635454545454545,
+      "board_matched_auroc": 0.8638181818181818,
+      "board_minus_server_pp": 0.027272727272731334,
+      "independent_pairwise_board_auc": 0.8638181818181818,
+      "independent_server_auc": 0.8635454545454545,
+      "normal_path_set_matches": true,
+      "anomaly_path_set_matches": true
+    },
+    {
+      "combination": "vari-grip/bird-nest",
+      "normal_count": 500,
+      "anomaly_count": 358,
+      "server_C_auroc": 0.9138826815642458,
+      "board_matched_auroc": 0.9162290502793297,
+      "board_minus_server_pp": 0.23463687150838686,
+      "independent_pairwise_board_auc": 0.9162290502793297,
+      "independent_server_auc": 0.9138826815642458,
+      "normal_path_set_matches": true,
+      "anomaly_path_set_matches": true
+    },
+    {
+      "combination": "vari-grip/rust",
+      "normal_count": 500,
+      "anomaly_count": 295,
+      "server_C_auroc": 0.8911457627118644,
+      "board_matched_auroc": 0.8917830508474577,
+      "board_minus_server_pp": 0.06372881355932725,
+      "independent_pairwise_board_auc": 0.8917830508474577,
+      "independent_server_auc": 0.8911457627118644,
+      "normal_path_set_matches": true,
+      "anomaly_path_set_matches": true
+    },
+    {
+      "combination": "yoke-suspension/rust",
+      "normal_count": 500,
+      "anomaly_count": 295,
+      "server_C_auroc": 0.9388474576271186,
+      "board_matched_auroc": 0.9396881355932203,
+      "board_minus_server_pp": 0.0840677966101655,
+      "independent_pairwise_board_auc": 0.9396881355932203,
+      "independent_server_auc": 0.9388474576271186,
+      "normal_path_set_matches": true,
+      "anomaly_path_set_matches": true
+    }
+  ],
+  "macro": {
+    "server_C": 0.9127640234325243,
+    "board_matched": 0.913677886417443,
+    "board_minus_server_pp": 0.09138629849186897
+  },
+  "fallback": {
+    "normal": {
+      "count": 21,
+      "total": 2500,
+      "rate": 0.0084
+    },
+    "anomaly": {
+      "count": 460,
+      "total": 2715,
+      "rate": 0.1694290976058932
+    }
+  },
+  "accuracy_acceptance_threshold": "NOT_DEFINED; descriptive difference only",
+  "threshold_tuning": false,
+  "independent_AUROC_checks_passed": true,
+  "server_raw_sha256": {
+    "glass-insulator__missing-cap_C.json": "bd1e4252f8317501c82cf3e8631752b7c578abf20df19b6f5d60ac67051660eb",
+    "lightning-rod-suspension__rust_C.json": "38cfc46a2fe40dd1d3555d14e796420b03e9255d77fc3c68154dbd3b2b6a18a8",
+    "polymer-insulator-upper-shackle__corrosion_C.json": "4c4a7325a4fa3d389d3da999746d23e14380ecdd8a48e4232d11fab7b210a0a9",
+    "polymer-insulator-upper-shackle__rust_C.json": "0ce5731814c3236c6de8decd09d3abe3e3333e48990f29e45c6a7683225b26dd",
+    "vari-grip__bird-nest_C.json": "105de50b7affdf7f0e5d75b36392df639b1ae9c2bc36d3184f72f12486b0d5ed",
+    "vari-grip__rust_C.json": "92b848c2030aeccadd17e026ba280d98090b56b011d2470dd039d947401230d6",
+    "yoke-suspension__rust_C.json": "15535d709886a898d2d2af793cb2bbcad4ed6b0ee7a39d6544cc72fcdfbee2ec"
+  }
+}

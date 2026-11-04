@@ -1,0 +1,59 @@
+{
+  "origin": "pl-AD EdgeInspect stage1 and validated InsPLAD C++ kernels",
+  "origin_commit": "e770e7bac40bbc4694560bc9ccb19d3ac7850acb",
+  "files": [
+    {
+      "file": "apps/infer.cpp",
+      "sha256": "fbc5bf91a714a33d19399cef748126f417a0dd500b79b111f0757f8e02462d44"
+    },
+    {
+      "file": "include/edgeinspect/inference_engine.h",
+      "sha256": "9ac8a3991376e30b633e111c28dc7337573b67c88091dcd511e1a5add3a12c47"
+    },
+    {
+      "file": "src/inference_engine.cpp",
+      "sha256": "0c70e374d7f5deff9895d6f6a81d0b4ab345b1752d171e5dae1030a63f1b33a4"
+    },
+    {
+      "file": "src/result.cpp",
+      "sha256": "315124dcf5214bf5738c173f19995ec2bd6b2cde00847269f136e89f2d68619a"
+    },
+    {
+      "file": "src/preprocessor.cpp",
+      "sha256": "3918bed4f8f927d72dd2fad660281cf1a1ba7dbccb26ea3fba0e3f7e7331cfcf"
+    },
+    {
+      "file": "third_party/insplad/include/insplad/scoring.h",
+      "sha256": "6dc9b2999e7af34117fd42160e71068ed8b7d1d27a555dd625914e687c0e62f7"
+    },
+    {
+      "file": "third_party/insplad/include/insplad/postprocess.h",
+      "sha256": "08d55535c085c8e7908228cba22b4a6856d2b6fb0b4edc064abfd86d13eb242d"
+    },
+    {
+      "file": "third_party/insplad/include/insplad/detection.h",
+      "sha256": "3753b6b69a3ee5b96744a81a653bb71c0a350303970c4f7135b2cc1e7fa7ee37"
+    },
+    {
+      "file": "third_party/insplad/src/detection.cpp",
+      "sha256": "63c6be961c38cb565919cb330918f3d005afbfb13f8835f87a4df9fb71192d94"
+    },
+    {
+      "file": "third_party/insplad/src/postprocess.cpp",
+      "sha256": "640099e2274ba45b2e4c1431d9c7aac69151c552ad92e282dad923c312e84167"
+    },
+    {
+      "file": "third_party/insplad/src/scoring.cpp",
+      "sha256": "42f240948a75e489e23c2ca66096fa5f0364ec5d73ac35a5d97deb7f23b56902"
+    },
+    {
+      "file": "third_party/insplad/tools/rknn_eval.cpp",
+      "sha256": "c6ee7629450379622c450e4d1a01889facc1641e9b91b0ccd6d88c61cba35865"
+    },
+    {
+      "file": "third_party/insplad/tools/roi_fixture.cpp",
+      "sha256": "fb8aaa33b830d343b3fb55f2c0d0194638190cb8051bd09ec343f98909eee8ba"
+    }
+  ],
+  "note": "EdgeInspect stage1 was uncommitted in the origin; per-file hashes identify copied code."
+}

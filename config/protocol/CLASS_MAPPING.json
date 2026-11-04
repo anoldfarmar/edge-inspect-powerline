@@ -1,0 +1,27 @@
+{
+  "detection_classes": {
+    "0": "yoke",
+    "1": "yoke suspension",
+    "2": "spacer",
+    "3": "stockbridge damper",
+    "4": "lightning rod shackle",
+    "5": "lightning rod suspension",
+    "6": "polymer insulator",
+    "7": "glass insulator",
+    "8": "tower id plate",
+    "9": "vari-grip",
+    "10": "polymer insulator lower shackle",
+    "11": "polymer insulator upper shackle",
+    "12": "spiral damper",
+    "13": "sphere"
+  },
+  "anomaly_asset_to_class": {
+    "glass-insulator": 7,
+    "lightning-rod-suspension": 5,
+    "polymer-insulator-upper-shackle": 11,
+    "vari-grip": 9,
+    "yoke-suspension": 1
+  },
+  "unknown_asset_behavior": "NO_BANK, not normal",
+  "fault_type_classification": false
+}

@@ -1,0 +1,62 @@
+{
+  "input": {
+    "name": "images",
+    "shape": [
+      1,
+      3,
+      320,
+      320
+    ],
+    "dtype": "float32",
+    "layout": "NCHW",
+    "range": [
+      0,
+      1
+    ]
+  },
+  "outputs": [
+    {
+      "name": "predictions",
+      "shape": [
+        1,
+        18,
+        2100
+      ],
+      "dtype": "float32",
+      "layout": "BCN",
+      "semantics": "channels0:4 center_x,center_y,width,height in320input pixels; channels4:18 sigmoid class probabilities; NO objectness; DFL already decoded"
+    },
+    {
+      "name": "backbone_p3",
+      "shape": [
+        1,
+        64,
+        40,
+        40
+      ],
+      "dtype": "float32",
+      "layout": "NCHW",
+      "semantics": "RAW backbone module4 C2f output, stride8, NOT Neck P3, NOT detection regression features"
+    }
+  ],
+  "actual_board_output_attributes": {
+    "status": "PENDING_BOARD_QUERY",
+    "required_fields": [
+      "index",
+      "name",
+      "n_dims",
+      "dims",
+      "fmt",
+      "type",
+      "qnt_type",
+      "scale",
+      "zp"
+    ],
+    "native_zero_copy_additional_fields": [
+      "w_stride",
+      "h_stride",
+      "size_with_stride"
+    ],
+    "rule": "Never infer native RKNN memory layout or quantization from logical ONNX arrays"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "model": "models/insplad_shared_p3_320_fp.rknn",
+  "banks": "banks/matched_rknn",
+  "runtime": "third_party/rknn/lib/aarch64/librknnrt.so",
+  "sdk_include": "third_party/rknn/include",
+  "build": "artifacts/build",
+  "results": "artifacts/runs",
+  "samples": "samples/manifest.json",
+  "regression": "assets/regression"
+}

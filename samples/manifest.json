@@ -1,0 +1,23 @@
+{
+  "note": "Images are local ignored assets; labels are for verification only, never threshold selection.",
+  "samples": [
+    {
+      "id": "normal",
+      "file": "samples/normal.jpg",
+      "asset": "glass-insulator",
+      "dataset_label": "normal",
+      "original_relative_path": "data/insplad/defect_supervised/glass-insulator/train/good/Fotos 01-12-2020_DJI_0016_cadeia_isolador_vidro_340.jpg",
+      "image_sha256": "19b6e321a70d10ae63496a551b38c68f210ecc29495e70e7aa5ad6f08c3f89d2",
+      "previous_score": 0.6873426511883736
+    },
+    {
+      "id": "anomaly",
+      "file": "samples/anomaly.jpg",
+      "asset": "glass-insulator",
+      "dataset_label": "anomaly",
+      "original_relative_path": "data/insplad/defect_supervised/glass-insulator/train/missing-cap/Fotos 01-12-2020_DJI_0014_cadeia_isolador_vidro_338.jpg",
+      "image_sha256": "bd0db2ca3deba6648693e9a62c5270b2a61b9b3b5326d99a66b7025b5d8dd3f1",
+      "previous_score": 0.7032674252986908
+    }
+  ]
+}

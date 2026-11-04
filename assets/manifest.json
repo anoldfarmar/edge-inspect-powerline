@@ -1,0 +1,73 @@
+{
+  "model_sha256": "097818af823ab9433e1179449e58d953957a6028b9f2c781f0da6d03fbbc25ec",
+  "runtime_version": "2.3.2",
+  "driver_observed": "0.9.8",
+  "bank_method": "matched RKNN support features; original server C-arm coreset indices; no KCenter rerun",
+  "files": [
+    {
+      "file": "models/insplad_shared_p3_320_fp.rknn",
+      "bytes": 7369127,
+      "sha256": "097818af823ab9433e1179449e58d953957a6028b9f2c781f0da6d03fbbc25ec"
+    },
+    {
+      "file": "third_party/rknn/include/rknn_api.h",
+      "bytes": 35707,
+      "sha256": "c48e11a6f41b451a5fd1e4ad774ea60252d3d94f78bee9b21ea3d21b21deba9a"
+    },
+    {
+      "file": "third_party/rknn/lib/aarch64/librknnrt.so",
+      "bytes": 7726232,
+      "sha256": "d31fc19c85b85f6091b2bd0f6af9d962d5264a4e410bfb536402ec92bac738e8"
+    },
+    {
+      "file": "banks/matched_rknn/glass-insulator.f32",
+      "bytes": 409600,
+      "sha256": "68550bbdc8c50f5ae8756ce15400e634f55d00692400f88874a4e8c34adc6d1d"
+    },
+    {
+      "file": "banks/matched_rknn/glass-insulator.indices.i64",
+      "bytes": 12800,
+      "sha256": "88540b08fcecb07a3386493016c8eb634ab2eb1b052dc5c3552f938fca45e073"
+    },
+    {
+      "file": "banks/matched_rknn/lightning-rod-suspension.f32",
+      "bytes": 409600,
+      "sha256": "4346663393eb2a9ff1557a2eb31d12d3ef20f1c6203ca44f8d5fc896cf4e4be5"
+    },
+    {
+      "file": "banks/matched_rknn/lightning-rod-suspension.indices.i64",
+      "bytes": 12800,
+      "sha256": "17f44789bc9e07557a9c222427618d54ea8ae4effd73d1b8c53dd37847a3be32"
+    },
+    {
+      "file": "banks/matched_rknn/polymer-insulator-upper-shackle.f32",
+      "bytes": 409600,
+      "sha256": "5970861b689cc60d0410cbb4b24bee57f840c7cd10e98292f7297d8f805e6bec"
+    },
+    {
+      "file": "banks/matched_rknn/polymer-insulator-upper-shackle.indices.i64",
+      "bytes": 12800,
+      "sha256": "acd8262e544c17acf503c45dc0ae8660b8bda7fc9f19df465bcb81a847a149f5"
+    },
+    {
+      "file": "banks/matched_rknn/vari-grip.f32",
+      "bytes": 409600,
+      "sha256": "b2ccef84b68f50ea04e83f4408d90ef9e52c57edb3a784bf1f6e1fb836650a98"
+    },
+    {
+      "file": "banks/matched_rknn/vari-grip.indices.i64",
+      "bytes": 12800,
+      "sha256": "3973b56e84ce522a7ca797022ecc0b595a49a2582c098a2885ccdf954948e2c4"
+    },
+    {
+      "file": "banks/matched_rknn/yoke-suspension.f32",
+      "bytes": 409600,
+      "sha256": "bdbe4b111825957c78d7900cbd625e18cb8487ddc6d276b6526e6ee81e9f9f59"
+    },
+    {
+      "file": "banks/matched_rknn/yoke-suspension.indices.i64",
+      "bytes": 12800,
+      "sha256": "27ae4dfe77a11473c22a25051319d5e80b131931e4dd3bca2b505fce155c5141"
+    }
+  ]
+}

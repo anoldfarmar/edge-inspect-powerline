@@ -1,0 +1,57 @@
+{
+  "passed": true,
+  "validation_directory": "artifacts/edgeinspect/stage1_20261101_145953_632641",
+  "check_count": 20,
+  "normal_anomaly": [
+    {
+      "label": "normal",
+      "score": 0.6873426511883736,
+      "previous_score": 0.6873426511883736,
+      "difference": 0.0,
+      "box_equal": true,
+      "fallback_equal": true
+    },
+    {
+      "label": "anomaly",
+      "score": 0.7032674252986908,
+      "previous_score": 0.7032674252986908,
+      "difference": 0.0,
+      "box_equal": true,
+      "fallback_equal": true
+    }
+  ],
+  "repeat100": {
+    "name": "repeat100_one_initialized_engine",
+    "passed": true,
+    "peak_rss_kib": 158052,
+    "mean_ms": 23.28202276,
+    "median_ms": 23.301524,
+    "p95_ms": 24.889585599999986,
+    "scope": "Unwarmed repeated same RGB, real forward each time; excludes file preprocessing and initialization; not a service/video benchmark or proof of zero memory leaks"
+  },
+  "ordinary_user": {
+    "user": "ubuntu",
+    "command": [
+      "runuser",
+      "-u",
+      "ubuntu",
+      "--",
+      "/home/ubuntu/zpq-workspace/pl-AD/artifacts/edgeinspect/build/edgeinspect_cli",
+      "--root",
+      "/home/ubuntu/zpq-workspace/pl-AD",
+      "--image",
+      "/home/ubuntu/zpq-workspace/pl-AD/datasets/data/insplad/defect_supervised/glass-insulator/train/good/Fotos 01-12-2020_DJI_0016_cadeia_isolador_vidro_340.jpg",
+      "--asset",
+      "glass-insulator",
+      "--output",
+      "/tmp/edgeinspect-stage1-user-ZToYkg/normal.json"
+    ],
+    "exit_code": 0,
+    "output": "/tmp/edgeinspect-stage1-user-ZToYkg/normal.json",
+    "score": 0.6873426511883736
+  },
+  "model_sha256": "097818af823ab9433e1179449e58d953957a6028b9f2c781f0da6d03fbbc25ec",
+  "compiler": "g++ (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+  "source_parent_commit": "e770e7bac40bbc4694560bc9ccb19d3ac7850acb",
+  "lifecycle_output": "{\"passed\":true,\"fd_before\":5,\"fd_after\":5,\"successful_engine_lifecycles\":3,\"post_init_failure_lifecycles\":3,\"bad_request_then_valid\":true}"
+}

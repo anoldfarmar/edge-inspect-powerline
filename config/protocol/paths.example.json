@@ -1,0 +1,9 @@
+{
+  "model": "/absolute/path/to/insplad_shared_p3_320_fp.rknn",
+  "data_root": "/absolute/path/to/unpacked/insplad-eval",
+  "frozen_inputs": "/absolute/path/to/unpacked/insplad-eval/version10-12/InsPLAD-sharedROI-ABC-ref3001-v1/FROZEN_INPUTS.json",
+  "roi_reference_package": "/absolute/path/to/P3-ROI-reference-v1",
+  "normal_bank_directory": null,
+  "output_root": "/absolute/path/to/results",
+  "note": "Path template only, not automatically consumed by an inference application. Keep machine-specific paths in ignored local_paths.json; null bank means anomaly scoring is NOT ready."
+}

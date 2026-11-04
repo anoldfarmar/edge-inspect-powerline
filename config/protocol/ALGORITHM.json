@@ -1,0 +1,41 @@
+{
+  "input": {
+    "batch": 1,
+    "size": [
+      320,
+      320
+    ],
+    "color": "RGB",
+    "resize": "PIL RGB bilinear stretch, not LetterBox",
+    "CPP_input": "uint8 RGB NHWC0..255, RKNN config /255 once; no second division",
+    "decode_resize": "OpenCV/RGA resize equivalence is NOT assumed; fixtures contain exact RGB bytes"
+  },
+  "detection": {
+    "classes": 14,
+    "conf": 0.25,
+    "nms_iou": 0.7,
+    "max_det": 300,
+    "boxes": "continuous xyxy, no inclusive +1 in IoU",
+    "expected_asset": "provided category in original C protocol",
+    "selection": "highest confidence expected class, ties lexicographic xyxy",
+    "fallback": "full320 ROI when expected class absent, mark fallback; never claim normally detected"
+  },
+  "ROI": {
+    "size": [
+      40,
+      40
+    ],
+    "spatial_scale": 0.125,
+    "aligned": true,
+    "sampling_ratio": 1,
+    "boundary": "outside feature coordinates[-1,W]/[-1,H] =>zero; otherwise clamp edge then bilinear",
+    "sequence": "raw P3 -> ROI -> patch channelL2 eps1e-12"
+  },
+  "score": {
+    "distance": "exact Euclidean1NN",
+    "aggregation": "mean largest8 patch distances",
+    "bank": "per-asset matching normal support path; not contained in RKNN model"
+  },
+  "normal_banks": "NOT rebuilt/exported by this conversion task; export target-precision matching banks before full anomaly deployment",
+  "evaluation": "No test query inference/AUROC, no test-derived alarm threshold in this conversion task"
+}
