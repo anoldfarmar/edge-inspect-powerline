@@ -1,20 +1,37 @@
 # 架构与阶段
 
-当前阶段1是同步单图CLI：
+阶段1是同步单图 CLI，继续保留：
 
 ```text
 apps/infer.cpp
     → prepare_image / prepare_rgb
-    → 一个InferenceEngine（一个RKNN ctx、五类正常库）
-    → 单次前向同时得到predictions和raw P3
-    → 原检测/NMS/选框 → 原RoIAlign/L2 → 精确欧氏1NN/top8
+    → InferenceEngine
+    → 单次前向 predictions + raw P3
+    → 检测/NMS/选框 → RoIAlign/L2 → 精确欧氏1NN/top8
     → JSON结果
 ```
 
-后续计划为C++17、单进程、一个任务推理工作线程：HTTP → TaskManager → 有界TaskQueue → InferenceEngine，TaskRepository与FileStorage管理持久化和受控文件。
+阶段2已实现 C++17、单进程、一个任务推理工作线程：
 
-阶段2才添加队列、QUEUED/RUNNING/SUCCEEDED/FAILED和SQLite；阶段3才添加本机监听的HTTP上传/查询；阶段4再添加中断恢复、停止策略和systemd示例。没有提前生成这些模块，也不引入Redis或消息中间件。
+```mermaid
+flowchart LR
+    CLI["apps/tasks.cpp
+本地提交/查询"] --> M["TaskManager"]
+    M --> Q["有界 TaskQueue"]
+    Q --> W["一个推理工作线程"]
+    W --> E["InferenceEngine"]
+    M --> DB[("TaskRepository / SQLite")]
+    W --> DB
+    M --> F["FileStorage"]
+    W --> F
+```
 
-模型在引擎构造时加载，任务不反复加载模型；队列未来仅保存任务ID、资产、受控路径。一个任务工作线程与现有检索中的4个OpenMP线程分别记录。
+TaskRepository 保存 QUEUED/RUNNING/SUCCEEDED/FAILED 当前状态。FileStorage 保存真实输入副本和结果文件。有界队列只保存任务 ID、类别、受控路径。模型和五类正常库在工作线程启动时初始化一次。任务工作线程和已有检索中的4个OpenMP线程是不同层次。
 
-执行失败与检测异常必须区分。现在只输出异常分数；没有冻结阈值，不把label传给算法，也不把无框或无正常库当正常。
+队列使用预分配环形槽位，在容量检查后、发布前提交数据库记录，避免正常运行中满队列留下孤立记录。正常退出排空已接受任务；系统故障停止接收，保留记录供检查。未完成任务不自动恢复。
+
+阶段3将添加本机监听的 HTTP 上传/查询，复用 TaskManager；阶段4再添加中断恢复、完整停止策略和 systemd 示例。视频文件和实时流需要单独设计。当前没有 Redis 或消息中间件。
+
+执行失败与检测异常必须区分。现在只输出异常分数；没有冻结阈值，不把 label 传给算法，也不把无框或无正常库当正常。
+
+先读 [阶段二代码阅读指南](stage2-reading-guide.md) 了解已实现代码、运行方式和验证结果；[阶段二实施指南](stage2-task-system.md) 保留为设计草图和验收参考。

@@ -9,8 +9,11 @@
 
 namespace {
 std::uint64_t positive(const std::string& s) {
-    std::uint64_t n=0; const auto result=std::from_chars(s.data(),s .data()+s.size(),n);
+    std::uint64_t n=0; 
+    const auto result=std::from_chars(s.data(),s .data()+s.size(),n);
+
     if(result.ec!=std::errc{} || result.ptr!=s.data()+s.size() || !n) throw std::invalid_argument("Expected positive integer: "+s);
+    
     return n;
 }
 void usage() {
@@ -23,8 +26,10 @@ void usage() {
       "No anomaly threshold is configured. Output score + null decision. JPEG/8-bit nonpalette PNG only.\n";
 }
 }
+
 int main(int argc,char** argv) {
     try {
+        // edgeinspect_cli --image samples/normal.jpg --asset glass-insulator
         std::map<std::string,std::string> args; bool diagnostic=false, preprocess_only=false;
         for(int i=1;i<argc;++i) {
             const std::string key=argv[i];

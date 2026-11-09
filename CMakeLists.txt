@@ -7,20 +7,51 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 include(CTest)
 find_package(OpenCV 4 REQUIRED COMPONENTS core imgcodecs imgproc)
 find_package(OpenSSL REQUIRED COMPONENTS Crypto)
+find_package(SQLite3 REQUIRED)
+find_package(Threads REQUIRED)
 set(RKNN_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/third_party/rknn/include" CACHE PATH "Local RKNN SDK header directory")
 set(RKNN_LIBRARY "${CMAKE_CURRENT_SOURCE_DIR}/third_party/rknn/lib/aarch64/librknnrt.so" CACHE FILEPATH "Local RKNN Runtime")
 if(NOT EXISTS "${RKNN_INCLUDE_DIR}/rknn_api.h" OR NOT EXISTS "${RKNN_LIBRARY}")
   message(FATAL_ERROR "RKNN SDK assets missing. See docs/assets.md; set RKNN_INCLUDE_DIR and RKNN_LIBRARY to your authorized SDK installation.")
 endif()
+
 add_subdirectory(third_party/insplad)
+
 add_library(edgeinspect_engine src/inference_engine.cpp src/preprocessor.cpp src/result.cpp)
 target_include_directories(edgeinspect_engine PUBLIC include PRIVATE ${RKNN_INCLUDE_DIR} ${OpenCV_INCLUDE_DIRS})
 target_link_libraries(edgeinspect_engine PUBLIC insplad_detection insplad_scoring PRIVATE ${RKNN_LIBRARY} ${CMAKE_DL_LIBS} ${OpenCV_LIBS} OpenSSL::Crypto)
+
 target_compile_options(edgeinspect_engine PRIVATE -Wall -Wextra -Wpedantic -fno-fast-math -ffp-contract=off)
 add_executable(edgeinspect_cli apps/infer.cpp)
 target_link_libraries(edgeinspect_cli PRIVATE edgeinspect_engine)
 target_compile_options(edgeinspect_cli PRIVATE -Wall -Wextra -Wpedantic)
+# Task records and coordination reuse the existing inference engine.
+add_library(edgeinspect_tasks_lib STATIC
+    src/task.cpp src/task_repository.cpp src/task_queue.cpp
+    src/file_storage.cpp src/task_manager.cpp)
+target_include_directories(edgeinspect_tasks_lib PUBLIC include)
+if(TARGET SQLite3::SQLite3)
+    set(EDGEINSPECT_SQLITE_TARGET SQLite3::SQLite3)
+else()
+    set(EDGEINSPECT_SQLITE_TARGET SQLite::SQLite3)
+endif()
+target_link_libraries(edgeinspect_tasks_lib PUBLIC edgeinspect_engine
+    PRIVATE ${EDGEINSPECT_SQLITE_TARGET} Threads::Threads)
+target_compile_options(edgeinspect_tasks_lib PRIVATE -Wall -Wextra -Wpedantic)
+add_executable(edgeinspect_tasks apps/tasks.cpp)
+target_link_libraries(edgeinspect_tasks PRIVATE edgeinspect_tasks_lib)
+target_compile_options(edgeinspect_tasks PRIVATE -Wall -Wextra -Wpedantic)
+
+# Retained as the small database example used during the walkthrough.
+add_executable(edgeinspect_repository_init tests/task_repository_init.cpp)
+target_link_libraries(edgeinspect_repository_init PRIVATE edgeinspect_tasks_lib)
+
 if(BUILD_TESTING)
+  add_executable(edgeinspect_task_system_test tests/task_system_test.cpp)
+  target_link_libraries(edgeinspect_task_system_test PRIVATE edgeinspect_tasks_lib ${EDGEINSPECT_SQLITE_TARGET} Threads::Threads)
+  target_compile_options(edgeinspect_task_system_test PRIVATE -Wall -Wextra -Wpedantic)
+  add_test(NAME edgeinspect_task_system COMMAND edgeinspect_task_system_test)
+  set_tests_properties(edgeinspect_task_system PROPERTIES TIMEOUT 30)
   add_executable(edgeinspect_core_test tests/core_test.cpp)
   target_link_libraries(edgeinspect_core_test PRIVATE edgeinspect_engine)
   add_test(NAME edgeinspect_core COMMAND edgeinspect_core_test)

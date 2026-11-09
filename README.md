@@ -1,6 +1,6 @@
 # EdgeInspect Powerline
 
-基于 Radxa ROCK 5T / RK3588 的工业异常检测与任务管理项目，用于学习 Linux C++ 应用开发。当前完成**阶段1：推理模块化与单图CLI**，尚未实现任务队列、SQLite、HTTP及systemd服务。
+基于 Radxa ROCK 5T / RK3588 的工业异常检测与任务管理项目，用于学习 Linux C++ 应用开发。当前已实现**阶段1：推理模块化与单图CLI**及**阶段2：本地任务队列、SQLite和常驻工作线程**；HTTP、视频和systemd服务尚未实现。
 
 复用已有 InsPLAD 共享P3 RKNN模型、正常库、检测选框、RoIAlign、patch归一化和精确1NN/top8评分。没有重新训练或替换算法。
 
@@ -8,6 +8,7 @@
 
 ```text
 apps/infer.cpp                  单图CLI的main入口
+apps/tasks.cpp                  阶段二常驻任务程序入口
 include/edgeinspect/            输入、结果与InferenceEngine接口
 src/                            RKNN生命周期、图片预处理、结果保存
 third_party/insplad/            已验证的检测、ROI、评分源码及原数值参考工具
@@ -26,7 +27,7 @@ artifacts/                      新build、日志和输出，Git忽略
 
 ## 编译与单图推理
 
-需要 ARM64 Linux、G++（C++17）、CMake、OpenMP、OpenCV 4开发库、OpenSSL Crypto开发库、可用的RKNN Runtime和NPU驱动。复制设备实际验证版本：GCC 13.3、CMake 3.30.5、OpenCV 4.10、Runtime 2.3.2、驱动0.9.8。
+需要 ARM64 Linux、G++（C++17）、CMake、OpenMP、OpenCV 4开发库、OpenSSL Crypto开发库、SQLite3开发库、可用的RKNN Runtime和NPU驱动。复制设备实际验证版本：GCC 13.3、CMake 3.30.5、OpenCV 4.10、Runtime 2.3.2、驱动0.9.8。
 
 **Git仓库不包含模型、正常库、SDK及数据图片。** 克隆后必须按 [资产说明](docs/assets.md) 提供授权资产，不能只克隆源码就宣称可推理。本次本机复制已带上这些独立实文件，没有依赖原目录的符号链接。
 
@@ -47,6 +48,18 @@ python3 -m json.tool artifacts/manual/normal.json
 输出必须是新文件，拒绝覆盖旧结果。资产类别必须明确给出；五类映射见 `config/protocol/CLASS_MAPPING.json`。没有正常库的类别返回 `NO_BANK`，不能判为正常。
 
 阈值尚未冻结，结果包含异常分数，`anomaly_threshold` 和 `is_anomaly` 为 `null`。程序执行成功与图片是否异常分开表示。当前不生成结果图片。
+
+## 本地任务系统（阶段二）
+
+构建后启动，模型在工作线程初始化一次；`--data-root` 保存数据库、输入副本和结果。请使用新的目录，不要使用含教学示例未完成记录的目录。
+
+```bash
+artifacts/build/edgeinspect_tasks --root "$PWD" --data-root artifacts/task-service
+```
+
+在程序内输入 `submit --image samples/normal.jpg --asset glass-insulator`，得到 ID 后使用 `get ID`、`wait ID`、`result ID`，用 `list` 查看最近任务，`quit` 正常排空退出。
+
+代码阅读、架构图、参数、数据库和实测范围见 [阶段二阅读指南](docs/stage2-reading-guide.md)。任务 SUCCEEDED 不表示图片正常；阈值语义与阶段一相同。本阶段不恢复崩溃前遗留任务。
 
 ## 验证
 
