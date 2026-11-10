@@ -1,6 +1,6 @@
 # EdgeInspect Powerline
 
-基于 Radxa ROCK 5T / RK3588 的工业异常检测与任务管理项目，用于学习 Linux C++ 应用开发。当前已实现**阶段1：推理模块化与单图CLI**及**阶段2：本地任务队列、SQLite和常驻工作线程**；HTTP、视频和systemd服务尚未实现。
+基于 Radxa ROCK 5T / RK3588 的工业异常检测与任务管理项目，用于学习 Linux C++ 应用开发。当前已实现**阶段1：推理模块化与单图CLI**、**阶段2：本地任务队列、SQLite和常驻工作线程**以及**阶段3：本机HTTP上传与查询**；视频、中断恢复和systemd服务尚未实现。
 
 复用已有 InsPLAD 共享P3 RKNN模型、正常库、检测选框、RoIAlign、patch归一化和精确1NN/top8评分。没有重新训练或替换算法。
 
@@ -9,6 +9,7 @@
 ```text
 apps/infer.cpp                  单图CLI的main入口
 apps/tasks.cpp                  阶段二常驻任务程序入口
+apps/http.cpp                   阶段三本机HTTP服务入口
 include/edgeinspect/            输入、结果与InferenceEngine接口
 src/                            RKNN生命周期、图片预处理、结果保存
 third_party/insplad/            已验证的检测、ROI、评分源码及原数值参考工具
@@ -61,6 +62,20 @@ artifacts/build/edgeinspect_tasks --root "$PWD" --data-root artifacts/task-servi
 
 代码阅读、架构图、参数、数据库和实测范围见 [阶段二阅读指南](docs/stage2-reading-guide.md)。任务 SUCCEEDED 不表示图片正常；阈值语义与阶段一相同。本阶段不恢复崩溃前遗留任务。
 
+## 本机 HTTP 服务（阶段三）
+
+```bash
+artifacts/build/edgeinspect_http --root "$PWD" --data-root artifacts/http-service --port 8080
+```
+
+在开发板另一个终端上传真实图片：
+
+```bash
+curl -i -F 'image=@samples/normal.jpg' -F 'asset=glass-insulator' http://127.0.0.1:8080/tasks
+```
+
+返回 202 和 task_id 后，通过 `GET /tasks/ID` 查询状态、`GET /tasks/ID/result` 获取结果。仅监听 127.0.0.1；Ctrl+C 或 SIGTERM 停止 HTTP 后排空已接受任务。上传及 API、源码阅读和实测范围见 [阶段三阅读指南](docs/stage3-reading-guide.md)。
+
 ## 验证
 
 Python/PIL只作为离线测试参考，C++图片推理不启动Python子进程。测试依赖见 `requirements.txt`，安装到项目虚拟环境，不需要修改系统Python。
@@ -82,7 +97,7 @@ python3 -m venv .venv
 
 历史 InsPLAD 评测使用50张正常支持图、5215张查询图，已知资产条件下七个资产/故障组合宏平均AUROC：板端匹配RKNN库 **0.9136778864**，服务器FP32 C臂 **0.9127640234**。这是2026-10-22的历史结果，非本次迁移重新全量评测，见 [历史指标](docs/history/board_eval_20261022/metrics.json)。AUROC不是分类准确率，也不提供报警阈值。
 
-新目录实际运行与迁移范围见 [迁移记录](docs/migration.md)。模型/ROI/评分不变；没有把已预处理RGB的重复调用延迟称为摄像头FPS。当前没有摄像头或HTTP入口。
+新目录实际运行与迁移范围见 [迁移记录](docs/migration.md)。模型/ROI/评分不变；没有把已预处理RGB的重复调用延迟称为摄像头FPS。当前没有摄像头入口；本机 HTTP 入口见阶段三说明。
 
 阅读顺序：[main函数](apps/infer.cpp) → [接口](include/edgeinspect/inference_engine.h) → [引擎](src/inference_engine.cpp) → [阶段1说明](docs/stage1.md)。总体设计见 [架构](docs/architecture.md)。
 

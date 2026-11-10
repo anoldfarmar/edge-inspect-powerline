@@ -22,9 +22,11 @@ target_include_directories(edgeinspect_engine PUBLIC include PRIVATE ${RKNN_INCL
 target_link_libraries(edgeinspect_engine PUBLIC insplad_detection insplad_scoring PRIVATE ${RKNN_LIBRARY} ${CMAKE_DL_LIBS} ${OpenCV_LIBS} OpenSSL::Crypto)
 
 target_compile_options(edgeinspect_engine PRIVATE -Wall -Wextra -Wpedantic -fno-fast-math -ffp-contract=off)
+# 单个图片的测试入口
 add_executable(edgeinspect_cli apps/infer.cpp)
 target_link_libraries(edgeinspect_cli PRIVATE edgeinspect_engine)
 target_compile_options(edgeinspect_cli PRIVATE -Wall -Wextra -Wpedantic)
+
 # Task records and coordination reuse the existing inference engine.
 add_library(edgeinspect_tasks_lib STATIC
     src/task.cpp src/task_repository.cpp src/task_queue.cpp
@@ -38,15 +40,33 @@ endif()
 target_link_libraries(edgeinspect_tasks_lib PUBLIC edgeinspect_engine
     PRIVATE ${EDGEINSPECT_SQLITE_TARGET} Threads::Threads)
 target_compile_options(edgeinspect_tasks_lib PRIVATE -Wall -Wextra -Wpedantic)
+# 持续接收任务、排队推理、查询结果
 add_executable(edgeinspect_tasks apps/tasks.cpp)
 target_link_libraries(edgeinspect_tasks PRIVATE edgeinspect_tasks_lib)
 target_compile_options(edgeinspect_tasks PRIVATE -Wall -Wextra -Wpedantic)
+
+# Stage 3 transport adapter: fixed loopback HTTP, shared stage-2 TaskManager.
+add_library(edgeinspect_http_lib STATIC src/http_server.cpp src/http_service.cpp)
+target_include_directories(edgeinspect_http_lib PUBLIC include)
+target_include_directories(edgeinspect_http_lib SYSTEM PRIVATE third_party/cpp-httplib)
+target_link_libraries(edgeinspect_http_lib PUBLIC edgeinspect_tasks_lib PRIVATE Threads::Threads)
+target_compile_options(edgeinspect_http_lib PRIVATE -Wall -Wextra -Wpedantic)
+add_executable(edgeinspect_http apps/http.cpp)
+target_link_libraries(edgeinspect_http PRIVATE edgeinspect_http_lib)
+target_compile_options(edgeinspect_http PRIVATE -Wall -Wextra -Wpedantic)
 
 # Retained as the small database example used during the walkthrough.
 add_executable(edgeinspect_repository_init tests/task_repository_init.cpp)
 target_link_libraries(edgeinspect_repository_init PRIVATE edgeinspect_tasks_lib)
 
 if(BUILD_TESTING)
+  find_package(Python3 REQUIRED COMPONENTS Interpreter)
+  add_executable(edgeinspect_http_fixture tests/http_fixture.cpp)
+  target_link_libraries(edgeinspect_http_fixture PRIVATE edgeinspect_http_lib)
+  target_compile_options(edgeinspect_http_fixture PRIVATE -Wall -Wextra -Wpedantic)
+  add_test(NAME edgeinspect_http_api
+    COMMAND ${Python3_EXECUTABLE} -B ${CMAKE_CURRENT_SOURCE_DIR}/tests/http_api_test.py $<TARGET_FILE:edgeinspect_http_fixture>)
+  set_tests_properties(edgeinspect_http_api PROPERTIES TIMEOUT 90)
   add_executable(edgeinspect_task_system_test tests/task_system_test.cpp)
   target_link_libraries(edgeinspect_task_system_test PRIVATE edgeinspect_tasks_lib ${EDGEINSPECT_SQLITE_TARGET} Threads::Threads)
   target_compile_options(edgeinspect_task_system_test PRIVATE -Wall -Wextra -Wpedantic)
